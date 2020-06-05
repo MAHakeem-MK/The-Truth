@@ -8,6 +8,8 @@ const val TOTAL_NO_QUESTIONS = 3
 
 class MainActivity : AppCompatActivity() {
     private val randomNumbers = mutableSetOf<Int>()
+    private var currentQuestion: Question? = null
+    private var noOfRight = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -17,12 +19,12 @@ class MainActivity : AppCompatActivity() {
         showQuestion()
 
         true_button.setOnClickListener {
-//            checkAnswer()
+            checkAnswer(true)
             showQuestion()
         }
 
         false_button.setOnClickListener {
-//            checkAnswer()
+            checkAnswer(false)
             showQuestion()
         }
     }
@@ -36,14 +38,27 @@ class MainActivity : AppCompatActivity() {
 
     private fun showQuestion() {
         randomNumbers.pop()?.also {
-            question_text.text = QuestionBank.questions[it].toString()
-        } ?: run { question_text.text = "No more questions" }
+            currentQuestion = QuestionBank.questions[it]
+            question_text.text = currentQuestion.toString()
+        } ?: run {
+            question_text.text = "No more questions"
+            currentQuestion = null
+        }
     }
 
-    private fun checkAnswer() {
-        TODO("Not yet implemented")
+    private fun checkAnswer(selectedOption: Boolean) {
+        currentQuestion?.let {
+            if (it.answer == selectedOption) {
+                noOfRight++
+            }
+        }
+        showScore()
     }
 
+    private fun showScore() {
+        // note the use of string template.
+        score_text.text = "${noOfRight.toString()}/$TOTAL_NO_QUESTIONS"
+    }
 }
 
 // Note the use of extension function.
