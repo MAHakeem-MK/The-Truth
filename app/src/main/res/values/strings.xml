@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">The Truth</string>
+    <string name="false_label">False</string>
+    <string name="true_label">True</string>
 </resources>
